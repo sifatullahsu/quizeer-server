@@ -110,9 +110,9 @@ model Performance {
   quizzes Quiz   @relation(fields: [quiz_id], references: [id])
 
   total_questions Int
-  correct_answer  Int
   total_point     Int
   minimum_point   Int
+  correct_answer  Int
   score           Float
   status          PerformanceStatus
 
