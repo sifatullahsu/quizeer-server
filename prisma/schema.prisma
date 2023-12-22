@@ -9,3 +9,104 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  admin
+  performer
+}
+
+enum PerformanceStatus {
+  passed
+  failed
+}
+
+model User {
+  id       String @id() @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     Role
+
+  quizzes      Quiz[]
+  performances Performance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Quiz {
+  id                String @id() @default(uuid())
+  title             String
+  short_description String
+  description       String
+  total_point       Int
+  minimum_point     Int
+  duration          Int
+
+  author_id String
+  authors   User   @relation(fields: [author_id], references: [id])
+
+  questions    Question[]
+  performances Performance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("quizzes")
+}
+
+model Question {
+  id          String @id() @default(uuid())
+  title       String
+  description String
+  point       Int
+  remark      String
+
+  quiz_id String
+  quizes  Quiz   @relation(fields: [quiz_id], references: [id])
+
+  options Option[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("questions")
+}
+
+model Option {
+  id         String  @id() @default(uuid())
+  text       String
+  is_correct Boolean
+
+  question_id String
+  questions   Question @relation(fields: [question_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("options")
+}
+
+model Performance {
+  id String @id() @default(uuid())
+
+  user_id String
+  users   User   @relation(fields: [user_id], references: [id])
+
+  quiz_id String
+  quizzes Quiz   @relation(fields: [quiz_id], references: [id])
+
+  total_questions Int
+  correct_answer  Int
+  total_point     Int
+  minimum_point   Int
+  score           Float
+  status          PerformanceStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("performances")
+}
