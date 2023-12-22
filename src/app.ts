@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import cors from 'cors'
 import express, { Application, NextFunction, Request, Response } from 'express'
 import httpStatus from 'http-status'
-import { errorHandler } from './app/middlewares'
+import { errorHandler, reqUser } from './app/middlewares'
 import { AppRouter } from './app/routes'
 
 const app: Application = express()
@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 
 // Global routes handler
-app.use('/api/v1', AppRouter)
+app.use('/api/v1', reqUser(), AppRouter)
 
 // Global error handler
 app.use(errorHandler)
