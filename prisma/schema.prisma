@@ -35,6 +35,18 @@ model User {
   @@map("users")
 }
 
+model Category {
+  id    String @id() @default(uuid())
+  title String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quizzes Quiz[]
+
+  @@map("categories")
+}
+
 model Quiz {
   id                String @id() @default(uuid())
   title             String
@@ -43,6 +55,9 @@ model Quiz {
   total_point       Int
   minimum_point     Int
   duration          Int
+
+  category_id String?
+  categories  Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
 
   questions    Question[]
   performances Performance[]
@@ -61,7 +76,7 @@ model Question {
   remark      String
 
   quiz_id String
-  quizes  Quiz   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+  quizzes Quiz   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
 
   options Option[]
 
