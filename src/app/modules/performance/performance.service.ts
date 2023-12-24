@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Performance } from '@prisma/client'
 import { prisma } from '../../../app'
 
@@ -11,9 +12,34 @@ const createData = async (payload: iType): Promise<iType | null> => {
   return result
 }
 
-const getAllData = async (): Promise<iType[]> => {
+const getAllData = async (query: Record<string, any>): Promise<iType[]> => {
+  const { quiz_id } = query
+
   const result = await prisma.performance.findMany({
-    where: {}
+    where: quiz_id ? { quiz_id } : {},
+    orderBy: quiz_id
+      ? [
+          {
+            score: 'desc'
+          },
+          {
+            correct_answer: 'desc'
+          },
+          {
+            createdAt: 'desc'
+          }
+        ]
+      : {
+          createdAt: 'desc'
+        },
+    include: {
+      users: {
+        select: {
+          name: true,
+          email: true
+        }
+      }
+    }
   })
 
   return result

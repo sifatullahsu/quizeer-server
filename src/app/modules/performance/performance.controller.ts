@@ -15,7 +15,7 @@ const createData = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getAllData = catchAsync(async (req: Request, res: Response) => {
-  const result = await service.getAllData()
+  const result = await service.getAllData(req.query)
 
   apiResponse(res, {
     status: httpStatus.OK,

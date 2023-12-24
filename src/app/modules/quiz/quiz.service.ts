@@ -54,6 +54,9 @@ const getAllData = async (): Promise<iType[]> => {
         include: {
           options: true
         }
+      },
+      categories: {
+        select: { title: true, id: true }
       }
     }
   })
