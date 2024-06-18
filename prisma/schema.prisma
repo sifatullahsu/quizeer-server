@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/client"
 }
 
 datasource db {
@@ -48,10 +49,10 @@ model Category {
 }
 
 model Quiz {
-  id                String @id() @default(uuid())
+  id                String  @id() @default(uuid())
   title             String
   short_description String
-  description       String
+  description       String?
   total_point       Int
   minimum_point     Int
   duration          Int
@@ -69,11 +70,11 @@ model Quiz {
 }
 
 model Question {
-  id          String @id() @default(uuid())
+  id          String  @id() @default(uuid())
   title       String
-  description String
+  description String?
   point       Int
-  remark      String
+  remark      String?
 
   quiz_id String
   quizzes Quiz   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)

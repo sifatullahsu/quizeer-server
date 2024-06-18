@@ -58,6 +58,9 @@ const getAllData = async (): Promise<iType[]> => {
       categories: {
         select: { title: true, id: true }
       }
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   })
 
